@@ -1,0 +1,5 @@
+.env
+bruno
+dist
+generated/prisma
+node_modules

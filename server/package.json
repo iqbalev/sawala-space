@@ -1,0 +1,33 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "main": "src/server.ts",
+  "type": "module",
+  "keywords": [],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx --watch src/server.ts",
+    "start": "node dist/server.js"
+  },
+  "packageManager": "pnpm@10.9.0",
+  "devDependencies": {
+    "@tsconfig/node-lts": "^22.0.1",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1",
+    "prisma": "^6.6.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "zod": "^3.24.3"
+  }
+}
