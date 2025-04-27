@@ -1,11 +1,24 @@
 import { useNavigate, Link } from "react-router";
+import { useAuth } from "../contexts/AuthContext";
 import { useForm } from "react-hook-form";
 import { SignInFormData, signInSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "../components/FormInput";
 
+type SignInResponse = {
+  success: boolean;
+  message: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+  token: string;
+};
+
 const SignInPage = () => {
   const navigate = useNavigate();
+  const { signIn } = useAuth();
   const {
     handleSubmit,
     register,
@@ -14,7 +27,6 @@ const SignInPage = () => {
   } = useForm<SignInFormData>({ resolver: zodResolver(signInSchema) });
 
   const onSubmit = async (data: SignInFormData) => {
-    console.log("Submitted form:", data);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/auth/sign-in`,
@@ -25,12 +37,13 @@ const SignInPage = () => {
         }
       );
 
-      const result = await response.json();
-      console.log("Result:", result);
-
+      const result: SignInResponse = await response.json();
       if (!result.success) {
         return setError("root", { message: result.message });
       }
+
+      const token = "Bearer " + result.token;
+      signIn(token);
       return navigate("/");
     } catch (error) {
       console.log("Unexpected error:", error);

@@ -1,7 +1,9 @@
+import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { Link } from "react-router";
 
 const Navbar = () => {
+  const { isAuthenticated, signOut } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
   const toggleMobileMenu = () => {
@@ -16,54 +18,95 @@ const Navbar = () => {
 
       {/* Desktop Menu */}
       <ul className="hidden sm:flex gap-8 sm:items-center">
-        <li>
-          <Link
-            to="/sign-in"
-            className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
-          >
-            Sign In
-          </Link>
-        </li>
-
-        <li>
-          <Link
-            to="/sign-up"
-            className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
-          >
-            Sign Up
-          </Link>
-        </li>
+        {isAuthenticated ? (
+          <li>
+            <button
+              onClick={signOut}
+              type="button"
+              className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
+            >
+              Sign Out
+            </button>
+          </li>
+        ) : (
+          <>
+            <li>
+              <Link
+                to="/sign-in"
+                className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
+              >
+                Sign In
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/sign-up"
+                className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
+              >
+                Sign Up
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <ul className="flex sm:hidden flex-col text-left w-11/12 h-dvh absolute top-0 bg-white text-xl rounded-xl shadow-sm">
-          <li
-            onClick={closeMobileMenu}
-            className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
-          >
-            <Link to="/" className="block w-full p-2.5">
-              Home
-            </Link>
-          </li>
+          {isAuthenticated ? (
+            <>
+              <li
+                onClick={closeMobileMenu}
+                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+              >
+                <Link to="/" className="block w-full p-2.5">
+                  Home
+                </Link>
+              </li>
 
-          <li
-            onClick={closeMobileMenu}
-            className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
-          >
-            <Link to="/sign-in" className="block w-full p-2.5">
-              Sign In
-            </Link>
-          </li>
+              <li className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100">
+                <button
+                  onClick={() => {
+                    signOut();
+                    closeMobileMenu();
+                  }}
+                  type="button"
+                  className="block w-full p-2.5 text-left"
+                >
+                  Sign Out
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li
+                onClick={closeMobileMenu}
+                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+              >
+                <Link to="/" className="block w-full p-2.5">
+                  Home
+                </Link>
+              </li>
 
-          <li
-            onClick={closeMobileMenu}
-            className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
-          >
-            <Link to="/sign-up" className="block w-full p-2.5">
-              Sign Up
-            </Link>
-          </li>
+              <li
+                onClick={closeMobileMenu}
+                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+              >
+                <Link to="/sign-in" className="block w-full p-2.5">
+                  Sign In
+                </Link>
+              </li>
+
+              <li
+                onClick={closeMobileMenu}
+                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+              >
+                <Link to="/sign-up" className="block w-full p-2.5">
+                  Sign Up
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       )}
 

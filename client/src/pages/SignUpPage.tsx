@@ -4,6 +4,11 @@ import { SignUpFormData, signUpSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "../components/FormInput";
 
+type SignUpResponse = {
+  success: boolean;
+  message: string;
+};
+
 const SignUpPage = () => {
   const navigate = useNavigate();
   const {
@@ -14,7 +19,6 @@ const SignUpPage = () => {
   } = useForm<SignUpFormData>({ resolver: zodResolver(signUpSchema) });
 
   const onSubmit = async (data: SignUpFormData) => {
-    console.log("Submitted form:", data);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/auth/sign-up`,
@@ -25,9 +29,7 @@ const SignUpPage = () => {
         }
       );
 
-      const result = await response.json();
-      console.log("Result:", result);
-
+      const result: SignUpResponse = await response.json();
       if (!result.success) {
         return setError("email", { message: result.message });
       }

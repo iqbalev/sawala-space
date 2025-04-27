@@ -1,7 +1,10 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { SignUpFormData, SignInFormData } from "../schema/index.js";
 import { prisma } from "../lib/index.js";
 import bcrypt from "bcryptjs";
+import passport from "../config/passport.config.js";
+import { User } from "../../generated/prisma/index.js";
+import jwt from "jsonwebtoken";
 
 export const signUp = async (
   req: Request<{}, {}, SignUpFormData>,
@@ -15,8 +18,9 @@ export const signUp = async (
 
     if (existingUser) {
       res
-        .status(400)
+        .status(409)
         .json({ success: false, message: "Email is already taken" });
+
       return;
     }
 
@@ -33,6 +37,7 @@ export const signUp = async (
       success: true,
       message: "Account created successfully.",
     });
+
     return;
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -42,25 +47,30 @@ export const signUp = async (
 
 export const signIn = async (
   req: Request<{}, {}, SignInFormData>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ) => {
-  try {
-    const { email, password } = req.body;
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (
-      !existingUser ||
-      !(await bcrypt.compare(password, existingUser.password))
-    ) {
-      res.status(400).json({
-        success: false,
-        message: "Incorrect email or password. Please try again.",
+  passport.authenticate(
+    "local",
+    { session: false },
+    (err: unknown, user: User, info: { message: string }) => {
+      if (err) return next(err);
+      if (!user) {
+        return res.status(400).json({ success: false, message: info.message });
+      }
+
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
+        expiresIn: "1h",
       });
-      return;
+
+      // Exclude password from user object
+      const { password, ...userNoPassword } = user;
+      return res.status(200).json({
+        success: true,
+        message: "Sign in success",
+        user: userNoPassword,
+        token,
+      });
     }
-    res.status(200).json({ success: true, message: "Sign in success" });
-    return;
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
-    return;
-  }
+  )(req, res, next);
 };
