@@ -1,10 +1,12 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { Link } from "react-router";
 
 const Navbar = () => {
   const { isAuthenticated, signOut } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -21,7 +23,10 @@ const Navbar = () => {
         {isAuthenticated ? (
           <li>
             <button
-              onClick={signOut}
+              onClick={() => {
+                signOut();
+                navigate("/sign-in");
+              }}
               type="button"
               className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
             >
@@ -69,6 +74,7 @@ const Navbar = () => {
                   onClick={() => {
                     signOut();
                     closeMobileMenu();
+                    navigate("/sign-in");
                   }}
                   type="button"
                   className="block w-full p-2.5 text-left"
