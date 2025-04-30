@@ -9,6 +9,7 @@ const validate = (schema: ZodSchema) => {
         success: false,
         errors: validationResult.error,
       });
+
       return;
     }
 
