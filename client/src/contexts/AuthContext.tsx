@@ -1,4 +1,5 @@
 import { ReactNode, createContext, useState, useContext } from "react";
+import { jwtDecode } from "jwt-decode";
 
 type AuthContext = {
   isAuthenticated: boolean;
@@ -10,10 +11,26 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
+type JwtPayload = {
+  exp: number;
+};
+
 const AuthContext = createContext<AuthContext | undefined>(undefined);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const isTokenValid = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+    try {
+      const decodedToken = jwtDecode<JwtPayload>(token);
+      return decodedToken.exp * 1000 > Date.now(); // Return true if token is not expired yet, false otherwise
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("token") // Return true if token exists, false if not (null)
+    isTokenValid() // True if token exists and not expired, false otherwise (null)
   );
 
   const signIn = (token: string) => {
