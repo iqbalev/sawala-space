@@ -2,12 +2,18 @@ import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
+import { UserIconSmall, ChevronIconDown, CloseIcon, BurgerIcon } from "./Icons";
 
 const Navbar = () => {
   const { isAuthenticated, signOut } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const closeDropdown = () => setIsDropdownOpen(false);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
@@ -19,22 +25,44 @@ const Navbar = () => {
       </Link>
 
       {/* Desktop Menu */}
-      <ul className="hidden sm:flex gap-8 sm:items-center">
+      <div className="hidden sm:flex relative">
         {isAuthenticated ? (
-          <li>
-            <button
-              onClick={() => {
-                signOut();
-                navigate("/sign-in");
-              }}
-              type="button"
-              className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
-            >
-              Sign Out
-            </button>
-          </li>
-        ) : (
           <>
+            <button onClick={toggleDropdown} className="flex items-center">
+              <UserIconSmall />
+              <ChevronIconDown />
+            </button>
+
+            {isDropdownOpen && (
+              <ul className="flex flex-col absolute bg-white top-12 right-0 w-40 shadow-sm border-gray-100">
+                <li className="hover:bg-blue-400 hover:text-white transition-all duration-100 w-full">
+                  <Link
+                    onClick={closeDropdown}
+                    to="/profile"
+                    className="block p-2"
+                  >
+                    Profile
+                  </Link>
+                </li>
+
+                <li className="hover:bg-blue-400 hover:text-white transition-all duration-100 w-full">
+                  <button
+                    onClick={() => {
+                      closeDropdown();
+                      navigate("/sign-in");
+                      signOut();
+                    }}
+                    type="button"
+                    className="w-full text-left p-2"
+                  >
+                    Sign Out
+                  </button>
+                </li>
+              </ul>
+            )}
+          </>
+        ) : (
+          <ul className="flex gap-8 sm:items-center">
             <li>
               <Link
                 to="/sign-in"
@@ -43,6 +71,7 @@ const Navbar = () => {
                 Sign In
               </Link>
             </li>
+
             <li>
               <Link
                 to="/sign-up"
@@ -51,9 +80,9 @@ const Navbar = () => {
                 Sign Up
               </Link>
             </li>
-          </>
+          </ul>
         )}
-      </ul>
+      </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
@@ -66,6 +95,15 @@ const Navbar = () => {
               >
                 <Link to="/" className="block w-full p-2.5">
                   Home
+                </Link>
+              </li>
+
+              <li
+                onClick={closeMobileMenu}
+                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+              >
+                <Link to="/profile" className="block w-full p-2.5">
+                  Profile
                 </Link>
               </li>
 
@@ -117,32 +155,7 @@ const Navbar = () => {
       )}
 
       <button onClick={toggleMobileMenu} className="sm:hidden">
-        {isMobileMenuOpen ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        ) : (
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        )}
+        {isMobileMenuOpen ? <CloseIcon /> : <BurgerIcon />}
       </button>
     </nav>
   );
