@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { prisma } from "../lib/index.js";
+import { Params } from "../types/index.js";
+import { NameReqBody, PasswordReqBody, BioReqBody } from "../schema/index.js";
 import bcrypt from "bcryptjs";
 
 export const getProfileById = async (req: Request, res: Response) => {
@@ -59,7 +61,10 @@ export const deleteProfileById = async (req: Request, res: Response) => {
   }
 };
 
-export const updateNameById = async (req: Request, res: Response) => {
+export const updateNameById = async (
+  req: Request<Params, {}, NameReqBody>,
+  res: Response
+) => {
   try {
     const user = await prisma.user.findUnique({ where: { id: req.params.id } });
     if (!user) {
@@ -94,7 +99,10 @@ export const updateNameById = async (req: Request, res: Response) => {
   }
 };
 
-export const updatePasswordById = async (req: Request, res: Response) => {
+export const updatePasswordById = async (
+  req: Request<Params, {}, PasswordReqBody>,
+  res: Response
+) => {
   const { currentPassword, newPassword } = req.body;
   try {
     const user = await prisma.user.findUnique({ where: { id: req.params.id } });
@@ -141,10 +149,12 @@ export const updatePasswordById = async (req: Request, res: Response) => {
   }
 };
 
-export const updateBioById = async (req: Request, res: Response) => {
+export const updateBioById = async (
+  req: Request<Params, {}, BioReqBody>,
+  res: Response
+) => {
   try {
     const user = await prisma.user.findUnique({ where: { id: req.params.id } });
-
     if (!user) {
       res.status(404).json({ success: false, message: "User is not found" });
       return;

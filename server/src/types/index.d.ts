@@ -8,3 +8,7 @@ declare global {
     }
   }
 }
+
+export type Params = {
+  id: string;
+};

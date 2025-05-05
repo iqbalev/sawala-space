@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { SignUpFormData, SignInFormData } from "../schema/index.js";
+import { SignUpReqBody, SignInReqBody } from "../schema/index.js";
 import { prisma } from "../lib/index.js";
 import bcrypt from "bcryptjs";
 import passport from "../config/passport.config.js";
@@ -7,7 +7,7 @@ import { User } from "../../generated/prisma/index.js";
 import jwt from "jsonwebtoken";
 
 export const signUp = async (
-  req: Request<{}, {}, SignUpFormData>,
+  req: Request<{}, {}, SignUpReqBody>,
   res: Response
 ) => {
   const { name, email, password } = req.body;
@@ -46,7 +46,7 @@ export const signUp = async (
 };
 
 export const signIn = async (
-  req: Request<{}, {}, SignInFormData>,
+  req: Request<{}, {}, SignInReqBody>,
   res: Response,
   next: NextFunction
 ) => {

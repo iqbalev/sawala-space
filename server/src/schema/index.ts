@@ -70,8 +70,8 @@ export const bioSchema = z.object({
   bio: z.string().nonempty("Please enter your bio"),
 });
 
-export type SignUpFormData = z.infer<typeof signUpSchema>;
-export type SignInFormData = z.infer<typeof signInSchema>;
-export type NameFormData = z.infer<typeof nameSchema>;
-export type PasswordFormData = z.infer<typeof passwordSchema>;
-export type BioFormData = z.infer<typeof bioSchema>;
+export type SignUpReqBody = z.infer<typeof signUpSchema>;
+export type SignInReqBody = z.infer<typeof signInSchema>;
+export type NameReqBody = z.infer<typeof nameSchema>;
+export type PasswordReqBody = z.infer<typeof passwordSchema>;
+export type BioReqBody = z.infer<typeof bioSchema>;
