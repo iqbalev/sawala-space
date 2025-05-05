@@ -3,12 +3,13 @@ import isOptionallyAuthenticated from "../middleware/isOptionallyAuthenticated.j
 import isAuthenticated from "../middleware/isAuthenticated.js";
 import isOwner from "../middleware/isOwner.js";
 import validate from "../middleware/validate.middleware.js";
-import { nameSchema, passwordSchema } from "../schema/index.js";
+import { nameSchema, passwordSchema, bioSchema } from "../schema/index.js";
 import {
   getProfileById,
   deleteProfileById,
   updateNameById,
   updatePasswordById,
+  updateBioById,
 } from "../controllers/users.controller.js";
 
 const usersRouter = Router();
@@ -29,6 +30,14 @@ usersRouter.patch(
   isOwner,
   validate(passwordSchema),
   updatePasswordById
+);
+
+usersRouter.patch(
+  "/users/:id/bio",
+  isAuthenticated,
+  isOwner,
+  validate(bioSchema),
+  updateBioById
 );
 
 export default usersRouter;

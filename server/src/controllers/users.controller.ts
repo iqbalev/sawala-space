@@ -140,3 +140,28 @@ export const updatePasswordById = async (req: Request, res: Response) => {
     return;
   }
 };
+
+export const updateBioById = async (req: Request, res: Response) => {
+  try {
+    const user = await prisma.user.findUnique({ where: { id: req.params.id } });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: "User is not found" });
+      return;
+    }
+
+    await prisma.user.update({
+      where: { id: req.params.id },
+      data: { bio: req.body.bio },
+    });
+
+    res
+      .status(200)
+      .json({ success: true, message: "Bio successfully updated" });
+
+    return;
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+    return;
+  }
+};
