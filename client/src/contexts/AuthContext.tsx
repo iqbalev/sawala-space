@@ -36,8 +36,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     if (!token) return;
     try {
       const decodedToken = jwtDecode<JwtPayload>(token);
-      const isTokenExpired = decodedToken.exp * 1000 > Date.now(); // Return true if token is not expired yet, false otherwise
-      if (isTokenExpired) {
+      const isTokenValid = decodedToken.exp * 1000 > Date.now(); // Return true if token is still valid (e.g. not expired yet), false otherwise
+      if (!isTokenValid) {
         localStorage.removeItem("token");
       } else {
         setUser({ id: decodedToken.id });
