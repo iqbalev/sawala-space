@@ -8,6 +8,7 @@ import ProfilePage, {
   UserArticles,
   UserComments,
 } from "./pages/ProfilePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,12 @@ const router = createBrowserRouter([
           { path: "articles", element: <UserArticles /> },
           { path: "comments", element: <UserComments /> },
         ],
+      },
+      {
+        path: "*",
+        element: (
+          <NotFoundPage message="The page you’re looking for doesn’t exist. It might have been moved or the URL could be incorrect." />
+        ),
       },
     ],
   },
