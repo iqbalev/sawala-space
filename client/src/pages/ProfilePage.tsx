@@ -1,17 +1,70 @@
-import { useLocation } from "react-router";
+import { useParams, useLocation, useOutletContext } from "react-router";
+import { useState, useEffect } from "react";
 import { UserIconBig } from "../components/Icons";
+import { formatDate } from "../utils";
 import { NavLink, Outlet } from "react-router";
+import LoadingScreen from "../components/LoadingScreen";
+import NotFoundPage from "./NotFoundPage";
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+  bio: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type UserResponse = {
+  success: boolean;
+  message: string;
+  user: User;
+};
 
 const ProfilePage = () => {
+  const { userId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
   const location = useLocation();
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/users/${userId}`
+        );
+
+        const data: UserResponse = await response.json();
+        if (!response.ok) {
+          console.log(data.message);
+          setUser(null);
+        } else {
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getUserProfile();
+  }, [userId]);
+
+  if (isLoading) return <LoadingScreen />;
+  if (!user) {
+    return (
+      <NotFoundPage message="The user you’re looking for doesn’t exist. It might have been moved or the URL could be incorrect." />
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4">
       <section className="flex flex-col sm:flex-row items-center gap-2">
         <UserIconBig />
         <div className="flex flex-col items-center sm:items-baseline">
-          <p className="text-lg font-semibold">Iqbalev</p>
-          <p>Joined on 9 March 2025</p>
+          <p className="text-xl font-semibold">{user.name}</p>
+          <p>Joined on {formatDate(user.createdAt)}</p>
         </div>
       </section>
 
@@ -20,7 +73,7 @@ const ProfilePage = () => {
           to="about"
           className={({ isActive }) =>
             `py-1 px-2 ${
-              location.pathname === "/profile" || isActive
+              location.pathname === `/profile/${userId}` || isActive
                 ? "border-b-2 border-blue-400"
                 : ""
             }`
@@ -52,15 +105,17 @@ const ProfilePage = () => {
         </NavLink>
       </nav>
 
-      <Outlet />
+      <Outlet context={{ user }} />
     </div>
   );
 };
 
 export const UserAbout = () => {
+  const { user } = useOutletContext<{ user: User }>();
+
   return (
     <section className="flex justify-center sm:justify-start">
-      <p>There's nothing here yet (about).</p>
+      <p>{user.bio || "There's nothing here yet."}</p>
     </section>
   );
 };
@@ -68,7 +123,7 @@ export const UserAbout = () => {
 export const UserArticles = () => {
   return (
     <section className="flex justify-center sm:justify-start">
-      <p>There's nothing here yet (articles).</p>
+      <p>There's nothing here yet.</p>
     </section>
   );
 };
@@ -76,7 +131,7 @@ export const UserArticles = () => {
 export const UserComments = () => {
   return (
     <section className="flex justify-center sm:justify-start">
-      <p>There's nothing here yet (comments).</p>
+      <p>There's nothing here yet.</p>
     </section>
   );
 };
