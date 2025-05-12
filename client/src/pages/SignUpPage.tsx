@@ -2,12 +2,8 @@ import { useNavigate, Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { SignUpFormData, signUpSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { SignUpResponse } from "../types";
 import FormInput from "../components/FormInput";
-
-type SignUpResponse = {
-  success: boolean;
-  message: string;
-};
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -18,21 +14,22 @@ const SignUpPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<SignUpFormData>({ resolver: zodResolver(signUpSchema) });
 
-  const onSubmit = async (data: SignUpFormData) => {
+  const onSubmit = async (formData: SignUpFormData) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/auth/sign-up`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(formData),
         }
       );
 
-      const result: SignUpResponse = await response.json();
-      if (!result.success) {
-        return setError("email", { message: result.message });
+      const data: SignUpResponse = await response.json();
+      if (!data.success) {
+        return setError("email", { message: data.message });
       }
+
       return navigate("/sign-in");
     } catch (error) {
       console.log("Unexpected error:", error);

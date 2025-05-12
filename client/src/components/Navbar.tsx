@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import { UserIconSmall, ChevronIconDown, CloseIcon, BurgerIcon } from "./Icons";
 
 const Navbar = () => {
-  const { isAuthenticated, user, signOut } = useAuth();
+  const { isAuthenticated, userId, signOut } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const Navbar = () => {
 
       {/* Desktop Menu */}
       <div className="hidden sm:flex relative">
-        {isAuthenticated && user ? (
+        {isAuthenticated && userId ? (
           <>
             <button onClick={toggleDropdown} className="flex items-center">
               <UserIconSmall />
@@ -47,7 +47,7 @@ const Navbar = () => {
                 <li className="hover:bg-blue-400 hover:text-white transition-all duration-100 w-full">
                   <Link
                     onClick={closeDropdown}
-                    to={`/profile/${user.id}`}
+                    to={`/profile/${userId}`}
                     className="block p-2"
                   >
                     Profile
@@ -96,7 +96,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <ul className="flex sm:hidden flex-col text-left w-11/12 h-dvh absolute top-0 bg-white text-xl rounded-xl shadow-sm">
-          {isAuthenticated && user ? (
+          {isAuthenticated && userId ? (
             <>
               <li
                 onClick={closeMobileMenu}
@@ -111,7 +111,7 @@ const Navbar = () => {
                 onClick={closeMobileMenu}
                 className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
               >
-                <Link to={`/profile/${user.id}`} className="block w-full p-2.5">
+                <Link to={`/profile/${userId}`} className="block w-full p-2.5">
                   Profile
                 </Link>
               </li>

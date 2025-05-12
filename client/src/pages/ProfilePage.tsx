@@ -1,30 +1,16 @@
 import { useParams, useLocation, useOutletContext } from "react-router";
 import { useState, useEffect } from "react";
+import type { UserProfile, UserResponse } from "../types";
 import { UserIconBig } from "../components/Icons";
 import { formatDate } from "../utils";
 import { NavLink, Outlet } from "react-router";
 import LoadingScreen from "../components/LoadingScreen";
 import NotFoundPage from "./NotFoundPage";
 
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  bio: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-type UserResponse = {
-  success: boolean;
-  message: string;
-  user: User;
-};
-
 const ProfilePage = () => {
   const { userId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -111,7 +97,7 @@ const ProfilePage = () => {
 };
 
 export const UserAbout = () => {
-  const { user } = useOutletContext<{ user: User }>();
+  const { user } = useOutletContext<{ user: UserProfile }>();
 
   return (
     <section className="flex justify-center sm:justify-start">

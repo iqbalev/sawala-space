@@ -1,13 +1,4 @@
-import { UseFormRegisterReturn } from "react-hook-form";
-
-type InputTypeAttribute = "email" | "password" | "text";
-type FormInputProps = {
-  label: string;
-  register: UseFormRegisterReturn;
-  type: InputTypeAttribute;
-  placeholder: string;
-  error: string | undefined;
-};
+import type { FormInputProps } from "../types";
 
 const FormInput = ({
   label,

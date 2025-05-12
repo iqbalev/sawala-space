@@ -1,10 +1,7 @@
+import type { NotFoundPageProps } from "../types";
 import { Link } from "react-router";
 
-type NotFoundPage = {
-  message: string;
-};
-
-const NotFoundPage = ({ message }: NotFoundPage) => {
+const NotFoundPage = ({ message }: NotFoundPageProps) => {
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-[80dvh]">
       <section className="flex flex-col gap-1 text-center">

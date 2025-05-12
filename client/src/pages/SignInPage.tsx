@@ -3,18 +3,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { useForm } from "react-hook-form";
 import { SignInFormData, signInSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { SignInResponse } from "../types";
 import FormInput from "../components/FormInput";
-
-type SignInResponse = {
-  success: boolean;
-  message: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  token: string;
-};
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -26,23 +16,23 @@ const SignInPage = () => {
     formState: { errors, isSubmitting },
   } = useForm<SignInFormData>({ resolver: zodResolver(signInSchema) });
 
-  const onSubmit = async (data: SignInFormData) => {
+  const onSubmit = async (formData: SignInFormData) => {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/auth/sign-in`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(formData),
         }
       );
 
-      const result: SignInResponse = await response.json();
-      if (!result.success) {
-        return setError("root", { message: result.message });
+      const data: SignInResponse = await response.json();
+      if (!data.success) {
+        return setError("root", { message: data.message });
       }
 
-      const token = "Bearer " + result.token;
+      const token = "Bearer " + data.token;
       signIn(token);
       return navigate("/");
     } catch (error) {
