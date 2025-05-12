@@ -24,7 +24,7 @@ const SignInPage = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       const data: SignInResponse = await response.json();
@@ -44,9 +44,9 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 max-w-xl w-full mx-auto py-8">
-      <section className="flex flex-col gap-2 bg-blue-50 p-6 rounded-xl">
-        <h1 className="text-4xl sm:text-5xl font-semibold">
+    <div className="mx-auto flex w-full max-w-xl flex-col gap-4 py-8">
+      <section className="flex flex-col gap-2 rounded-xl bg-blue-50 p-6">
+        <h1 className="text-4xl font-semibold sm:text-5xl">
           Continue Your Journey
         </h1>
         <p className="text-xl">Let’s pick up where you left off.</p>
@@ -59,7 +59,7 @@ const SignInPage = () => {
       >
         <div className="flex flex-col gap-2">
           {errors.root && (
-            <p className="text-sm text-white bg-red-400 p-3 rounded-xl">
+            <p className="rounded-xl bg-red-400 p-3 text-sm text-white">
               {errors.root.message}
             </p>
           )}
@@ -84,7 +84,7 @@ const SignInPage = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="text-xl p-4 text-white rounded-xl bg-blue-400/100 font-semibold hover:bg-blue-400/80 active:scale-95 transition-all duration-200"
+          className="rounded-xl bg-blue-400/100 p-4 text-xl font-semibold text-white transition-all duration-200 hover:bg-blue-400/80 active:scale-95"
         >
           {isSubmitting ? "Submitting..." : "Sign In"}
         </button>
@@ -93,7 +93,7 @@ const SignInPage = () => {
           Don't have an account?
           <Link
             to="/sign-up"
-            className="mx-1 font-semibold hover:text-blue-400 transition-all duration-200"
+            className="mx-1 font-semibold transition-all duration-200 hover:text-blue-400"
           >
             Sign Up
           </Link>

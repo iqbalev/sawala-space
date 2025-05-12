@@ -15,11 +15,11 @@ const FormInput = ({
           {...register}
           type={type}
           placeholder={placeholder}
-          className="p-3 bg-gray-100 rounded-xl"
+          className="rounded-xl bg-gray-100 p-3"
         />
       </label>
 
-      {error && <p className="text-sm text-red-400 p-1">{error}</p>}
+      {error && <p className="p-1 text-sm text-red-400">{error}</p>}
     </div>
   );
 };

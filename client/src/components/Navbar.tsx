@@ -28,13 +28,13 @@ const Navbar = () => {
   useParams();
 
   return (
-    <nav className="flex items-center justify-between relative">
+    <nav className="relative flex items-center justify-between">
       <Link to="/" className="text-2xl font-semibold">
         SawalaSpace
       </Link>
 
       {/* Desktop Menu */}
-      <div className="hidden sm:flex relative">
+      <div className="relative hidden sm:flex">
         {isAuthenticated && userId ? (
           <>
             <button onClick={toggleDropdown} className="flex items-center">
@@ -43,8 +43,8 @@ const Navbar = () => {
             </button>
 
             {isDropdownOpen && (
-              <ul className="flex flex-col absolute bg-white top-12 right-0 w-40 shadow-sm border-gray-100">
-                <li className="hover:bg-blue-400 hover:text-white transition-all duration-100 w-full">
+              <ul className="absolute top-12 right-0 flex w-40 flex-col border-gray-100 bg-white shadow-sm">
+                <li className="w-full transition-all duration-100 hover:bg-blue-400 hover:text-white">
                   <Link
                     onClick={closeDropdown}
                     to={`/profile/${userId}`}
@@ -54,7 +54,7 @@ const Navbar = () => {
                   </Link>
                 </li>
 
-                <li className="hover:bg-blue-400 hover:text-white transition-all duration-100 w-full">
+                <li className="w-full transition-all duration-100 hover:bg-blue-400 hover:text-white">
                   <button
                     onClick={() => {
                       closeDropdown();
@@ -62,7 +62,7 @@ const Navbar = () => {
                       signOut();
                     }}
                     type="button"
-                    className="w-full text-left p-2"
+                    className="w-full p-2 text-left"
                   >
                     Sign Out
                   </button>
@@ -75,7 +75,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/sign-in"
-                className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
+                className="transition-all duration-100 hover:text-blue-400 hover:underline hover:underline-offset-6"
               >
                 Sign In
               </Link>
@@ -84,7 +84,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/sign-up"
-                className="hover:text-blue-400 hover:underline hover:underline-offset-6 transition-all duration-100"
+                className="transition-all duration-100 hover:text-blue-400 hover:underline hover:underline-offset-6"
               >
                 Sign Up
               </Link>
@@ -95,12 +95,12 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <ul className="flex sm:hidden flex-col text-left w-11/12 h-dvh absolute top-0 bg-white text-xl rounded-xl shadow-sm">
+        <ul className="absolute top-0 flex h-dvh w-11/12 flex-col rounded-xl bg-white text-left text-xl shadow-sm sm:hidden">
           {isAuthenticated && userId ? (
             <>
               <li
                 onClick={closeMobileMenu}
-                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+                className="border-b border-b-gray-100 transition-all duration-100 hover:rounded-xl hover:bg-gray-100"
               >
                 <Link to="/" className="block w-full p-2.5">
                   Home
@@ -109,14 +109,14 @@ const Navbar = () => {
 
               <li
                 onClick={closeMobileMenu}
-                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+                className="border-b border-b-gray-100 transition-all duration-100 hover:rounded-xl hover:bg-gray-100"
               >
                 <Link to={`/profile/${userId}`} className="block w-full p-2.5">
                   Profile
                 </Link>
               </li>
 
-              <li className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100">
+              <li className="border-b border-b-gray-100 transition-all duration-100 hover:rounded-xl hover:bg-gray-100">
                 <button
                   onClick={() => {
                     signOut();
@@ -134,7 +134,7 @@ const Navbar = () => {
             <>
               <li
                 onClick={closeMobileMenu}
-                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+                className="border-b border-b-gray-100 transition-all duration-100 hover:rounded-xl hover:bg-gray-100"
               >
                 <Link to="/" className="block w-full p-2.5">
                   Home
@@ -143,7 +143,7 @@ const Navbar = () => {
 
               <li
                 onClick={closeMobileMenu}
-                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+                className="border-b border-b-gray-100 transition-all duration-100 hover:rounded-xl hover:bg-gray-100"
               >
                 <Link to="/sign-in" className="block w-full p-2.5">
                   Sign In
@@ -152,7 +152,7 @@ const Navbar = () => {
 
               <li
                 onClick={closeMobileMenu}
-                className="hover:bg-gray-100 hover:rounded-xl transition-all duration-100 border-b border-b-gray-100"
+                className="border-b border-b-gray-100 transition-all duration-100 hover:rounded-xl hover:bg-gray-100"
               >
                 <Link to="/sign-up" className="block w-full p-2.5">
                   Sign Up

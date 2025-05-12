@@ -22,7 +22,7 @@ const SignUpPage = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       const data: SignUpResponse = await response.json();
@@ -40,10 +40,10 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 max-w-xl w-full mx-auto py-8">
-      <section className="flex flex-col gap-2 bg-blue-50 p-6 rounded-xl">
-        <h1 className="text-4xl sm:text-5xl font-semibold">
-          Join <span className="text-blue-400 font-semibold">SawalaSpace</span>
+    <div className="mx-auto flex w-full max-w-xl flex-col gap-4 py-8">
+      <section className="flex flex-col gap-2 rounded-xl bg-blue-50 p-6">
+        <h1 className="text-4xl font-semibold sm:text-5xl">
+          Join <span className="font-semibold text-blue-400">SawalaSpace</span>
         </h1>
 
         <p className="text-xl">
@@ -55,7 +55,7 @@ const SignUpPage = () => {
         Already have an account?
         <Link
           to="/sign-in"
-          className="mx-1 font-semibold hover:text-blue-400 transition-all duration-200"
+          className="mx-1 font-semibold transition-all duration-200 hover:text-blue-400"
         >
           Sign In
         </Link>
@@ -68,7 +68,7 @@ const SignUpPage = () => {
       >
         <div className="flex flex-col gap-2">
           {errors.root && (
-            <p className="text-sm text-white bg-red-400 p-3 rounded-xl">
+            <p className="rounded-xl bg-red-400 p-3 text-sm text-white">
               {errors.root.message}
             </p>
           )}
@@ -109,7 +109,7 @@ const SignUpPage = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="text-xl p-4 text-white rounded-xl bg-blue-400 font-semibold hover:bg-blue-400/80 active:scale-95 transition-all duration-200"
+          className="rounded-xl bg-blue-400 p-4 text-xl font-semibold text-white transition-all duration-200 hover:bg-blue-400/80 active:scale-95"
         >
           {isSubmitting ? "Submitting..." : "Sign Up"}
         </button>

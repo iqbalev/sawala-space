@@ -4,7 +4,7 @@ import { Outlet } from "react-router";
 
 const App = () => {
   return (
-    <div className="flex flex-col max-w-7xl w-full mx-auto min-h-dvh bg-white">
+    <div className="mx-auto flex min-h-dvh w-full max-w-7xl flex-col bg-white">
       <header className="p-4 shadow-sm">
         <Navbar />
       </header>

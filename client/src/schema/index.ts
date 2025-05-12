@@ -10,7 +10,7 @@ export const signUpSchema = z
       .max(50, "Name must be at most 50 characters")
       .regex(
         /^(?=.*[a-zA-Z])[a-zA-Z]+(?:[ '-][a-zA-Z]+)*$/,
-        "Name can only contain letters, spaces, apostrophes, and hyphens"
+        "Name can only contain letters, spaces, apostrophes, and hyphens",
       ),
     email: z
       .string()

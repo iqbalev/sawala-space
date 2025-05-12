@@ -17,7 +17,7 @@ const ProfilePage = () => {
     const getUserProfile = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/users/${userId}`
+          `${import.meta.env.VITE_API_URL}/users/${userId}`,
         );
 
         const data: UserResponse = await response.json();
@@ -46,7 +46,7 @@ const ProfilePage = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <section className="flex flex-col sm:flex-row items-center gap-2">
+      <section className="flex flex-col items-center gap-2 sm:flex-row">
         <UserIconBig />
         <div className="flex flex-col items-center sm:items-baseline">
           <p className="text-xl font-semibold">{user.name}</p>
@@ -54,11 +54,11 @@ const ProfilePage = () => {
         </div>
       </section>
 
-      <nav className="flex justify-center sm:justify-start border-b-2 border-gray-100 gap-2">
+      <nav className="flex justify-center gap-2 border-b-2 border-gray-100 sm:justify-start">
         <NavLink
           to="about"
           className={({ isActive }) =>
-            `py-1 px-2 ${
+            `px-2 py-1 ${
               location.pathname === `/profile/${userId}` || isActive
                 ? "border-b-2 border-blue-400"
                 : ""
@@ -71,7 +71,7 @@ const ProfilePage = () => {
         <NavLink
           to="articles"
           className={({ isActive }) =>
-            `border-l-0 py-1 px-2 ${
+            `border-l-0 px-2 py-1 ${
               isActive ? "border-b-2 border-blue-400" : ""
             }`
           }
@@ -82,7 +82,7 @@ const ProfilePage = () => {
         <NavLink
           to="comments"
           className={({ isActive }) =>
-            `border-l-0 py-1 px-2 ${
+            `border-l-0 px-2 py-1 ${
               isActive ? "border-b-2 border-blue-400" : ""
             }`
           }
