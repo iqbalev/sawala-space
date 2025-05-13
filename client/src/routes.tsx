@@ -5,7 +5,7 @@ import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import ProfilePage, {
   UserAbout,
-  UserArticles,
+  UserPosts,
   UserComments,
 } from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -18,13 +18,14 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "sign-up", element: <SignUpPage /> },
       { path: "sign-in", element: <SignInPage /> },
+
       {
         path: "profile/:userId",
         element: <ProfilePage />,
         children: [
           { index: true, element: <UserAbout /> },
           { path: "about", element: <UserAbout /> },
-          { path: "articles", element: <UserArticles /> },
+          { path: "posts", element: <UserPosts /> },
           { path: "comments", element: <UserComments /> },
         ],
       },

@@ -69,14 +69,14 @@ const ProfilePage = () => {
         </NavLink>
 
         <NavLink
-          to="articles"
+          to="posts"
           className={({ isActive }) =>
             `border-l-0 px-2 py-1 ${
               isActive ? "border-b-2 border-blue-400" : ""
             }`
           }
         >
-          Articles
+          Posts
         </NavLink>
 
         <NavLink
@@ -106,7 +106,7 @@ export const UserAbout = () => {
   );
 };
 
-export const UserArticles = () => {
+export const UserPosts = () => {
   return (
     <section className="flex justify-center sm:justify-start">
       <p>There's nothing here yet.</p>
