@@ -67,7 +67,21 @@ export const passwordSchema = z
   });
 
 export const bioSchema = z.object({
-  bio: z.string().nonempty("Please enter your bio"),
+  bio: z.string().trim().nonempty("Please enter your bio"),
+});
+
+export const createPostSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .nonempty("Please enter your post title")
+    .min(5, "Title must be at least 5 characters"),
+  content: z.string().trim().nonempty("Please enter your post content"),
+  published: z.boolean().optional().default(true),
+});
+
+export const createCommentSchema = z.object({
+  content: z.string().trim().nonempty("Please enter your comment"),
 });
 
 export type SignUpReqBody = z.infer<typeof signUpSchema>;
@@ -75,3 +89,5 @@ export type SignInReqBody = z.infer<typeof signInSchema>;
 export type NameReqBody = z.infer<typeof nameSchema>;
 export type PasswordReqBody = z.infer<typeof passwordSchema>;
 export type BioReqBody = z.infer<typeof bioSchema>;
+export type CreatePostReqBody = z.infer<typeof createPostSchema>;
+export type CreateCommentReqBody = z.infer<typeof createCommentSchema>;
