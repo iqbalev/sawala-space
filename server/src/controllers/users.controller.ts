@@ -42,6 +42,85 @@ export const getProfileById = async (
   }
 };
 
+export const getPostsById = async (
+  req: Request<Params, {}, {}>,
+  res: Response
+) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: "User is not found" });
+      return;
+    }
+
+    const posts = await prisma.post.findMany({
+      where: { authorId: req.params.id },
+      include: { author: { select: { name: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.status(200).json({
+      success: true,
+      message:
+        posts.length === 0
+          ? "This user has no post(s) yet"
+          : "Post(s) successfully retrieved",
+      posts,
+    });
+
+    return;
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+    return;
+  }
+};
+
+export const getCommentsById = async (
+  req: Request<Params, {}, {}>,
+  res: Response
+) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: "User is not found" });
+      return;
+    }
+
+    const comments = await prisma.comment.findMany({
+      where: { userId: req.params.id },
+      include: {
+        post: { select: { title: true } },
+        user: { select: { name: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    res.status(200).json({
+      success: true,
+      message:
+        comments.length === 0
+          ? "This user has no comment(s) yet"
+          : "Comment(s) successfully retrieved",
+      comments,
+    });
+
+    return;
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+    return;
+  }
+};
+
 export const deleteProfileById = async (
   req: Request<Params, {}, {}>,
   res: Response
