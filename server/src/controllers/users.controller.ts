@@ -1,35 +1,36 @@
 import { Request, Response } from "express";
-import { prisma } from "../lib/index.js";
 import { Params } from "../types/index.js";
+import { prisma } from "../lib/index.js";
 import { NameReqBody, PasswordReqBody, BioReqBody } from "../schema/index.js";
 import bcrypt from "bcryptjs";
 
-export const getProfileById = async (req: Request, res: Response) => {
-  const paramsId = req.params.id;
-  const authenticatedId = req.user?.id; // ID of authenticated user if exists (passed from prev middleware), undefined otherwise
+export const getProfileById = async (
+  req: Request<Params, {}, {}>,
+  res: Response
+) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: paramsId } });
+    const user = await prisma.user.findUnique({ where: { id: req.params.id } });
     if (!user) {
       res.status(404).json({ success: false, message: "User is not found" });
       return;
     }
 
-    // Return full profile if user IS authenticated and it's theirs
-    if (paramsId === authenticatedId) {
+    // req.user is optionally set by isOptionallyAuthenticated middleware IF the user is signed in
+    if (req.params.id === req.user?.id) {
+      // Return full profile if user IS authenticated and it's theirs
       res.status(200).json({
         success: true,
-        message: "User details successfully retrieved",
+        message: "User profiles successfully retrieved",
         user,
       });
 
       return;
-
-      // Return public profile only otherwise
     } else {
-      const { id, email, password, ...publicProfile } = user;
+      const { email, password, ...publicProfile } = user;
+      // Return public profile only otherwise
       res.status(200).json({
         success: true,
-        message: "User details successfully retrieved",
+        message: "User profiles successfully retrieved",
         user: publicProfile,
       });
 
@@ -41,7 +42,10 @@ export const getProfileById = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteProfileById = async (req: Request, res: Response) => {
+export const deleteProfileById = async (
+  req: Request<Params, {}, {}>,
+  res: Response
+) => {
   try {
     const user = await prisma.user.findUnique({ where: { id: req.params.id } });
     if (!user) {
@@ -81,16 +85,25 @@ export const updateNameById = async (
       return;
     }
 
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: req.params.id },
       data: {
         name: req.body.newName,
       },
+      select: {
+        id: true,
+        name: true,
+        bio: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
-    res
-      .status(200)
-      .json({ success: true, message: "Name successfully updated" });
+    res.status(200).json({
+      success: true,
+      message: "Name successfully updated",
+      user: updatedUser,
+    });
 
     return;
   } catch (error) {
@@ -131,16 +144,25 @@ export const updatePasswordById = async (
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: req.params.id },
       data: {
         password: hashedPassword,
       },
+      select: {
+        id: true,
+        name: true,
+        bio: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
-    res
-      .status(200)
-      .json({ success: true, message: "Password successfully updated" });
+    res.status(200).json({
+      success: true,
+      message: "Password successfully updated",
+      user: updatedUser,
+    });
 
     return;
   } catch (error) {
@@ -160,14 +182,23 @@ export const updateBioById = async (
       return;
     }
 
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: req.params.id },
       data: { bio: req.body.bio },
+      select: {
+        id: true,
+        name: true,
+        bio: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
-    res
-      .status(200)
-      .json({ success: true, message: "Bio successfully updated" });
+    res.status(200).json({
+      success: true,
+      message: "Bio successfully updated",
+      user: updatedUser,
+    });
 
     return;
   } catch (error) {
