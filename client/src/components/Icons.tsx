@@ -28,7 +28,7 @@ export const ChevronIconDown = () => {
         stroke-linejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
-        <rect width="24" height="24" fill="white"></rect>
+        <rect width="24" height="24" fill="none"></rect>
         <path
           d="M17 9.5L12 14.5L7 9.5"
           stroke="#000000"
@@ -56,7 +56,7 @@ export const ChevronIconUp = () => {
         stroke-linejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
-        <rect width="24" height="24" fill="white"></rect>
+        <rect width="24" height="24" fill="none"></rect>
         <path
           d="M7 14.5L12 9.5L17 14.5"
           stroke="#000000"

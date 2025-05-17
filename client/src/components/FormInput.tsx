@@ -15,7 +15,7 @@ const FormInput = ({
           {...register}
           type={type}
           placeholder={placeholder}
-          className="rounded-xl bg-gray-100 p-3"
+          className="rounded-xl bg-gray-200 p-3"
         />
       </label>
 

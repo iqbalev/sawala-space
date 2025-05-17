@@ -40,18 +40,14 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-col gap-4 py-8">
-      <section className="flex flex-col gap-2 rounded-xl bg-blue-50 p-6">
-        <h1 className="text-4xl font-semibold sm:text-5xl">
-          Join <span className="font-semibold text-blue-400">SawalaSpace</span>
+    <div className="mx-auto flex min-h-[80dvh] w-full max-w-lg flex-col justify-center gap-4">
+      <section className="flex flex-col gap-2 rounded-xl text-center">
+        <h1 className="text-4xl font-semibold">
+          Join <span className="text-blue-400">SawalaSpace</span>
         </h1>
-
-        <p className="text-xl">
-          ... and start sharing your ideas with the world.
-        </p>
       </section>
 
-      <p>
+      <p className="text-center">
         Already have an account?
         <Link
           to="/sign-in"
@@ -109,7 +105,7 @@ const SignUpPage = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-xl bg-blue-400 p-4 text-xl font-semibold text-white transition-all duration-200 hover:bg-blue-400/80 active:scale-95"
+          className="rounded-xl bg-blue-400 p-3 text-xl font-semibold text-white transition-all duration-200 hover:bg-blue-400/80 active:scale-95"
         >
           {isSubmitting ? "Submitting..." : "Sign Up"}
         </button>
