@@ -3,10 +3,10 @@ import App from "./App";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
-import ProfilePage, {
-  UserAbout,
-  UserPosts,
-  UserComments,
+import {
+  ProfilePage,
+  ProfilePostsPage,
+  ProfileCommentsPage,
 } from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -23,16 +23,15 @@ const router = createBrowserRouter([
         path: "profile/:userId",
         element: <ProfilePage />,
         children: [
-          { index: true, element: <UserAbout /> },
-          { path: "about", element: <UserAbout /> },
-          { path: "posts", element: <UserPosts /> },
-          { path: "comments", element: <UserComments /> },
+          { index: true, element: <ProfilePostsPage /> },
+          { path: "posts", element: <ProfilePostsPage /> },
+          { path: "comments", element: <ProfileCommentsPage /> },
         ],
       },
       {
         path: "*",
         element: (
-          <NotFoundPage message="The page you’re looking for doesn’t exist. It might have been moved or the URL could be incorrect." />
+          <NotFoundPage message="It might have been moved or the URL could be incorrect." />
         ),
       },
     ],

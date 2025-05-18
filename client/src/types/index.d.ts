@@ -11,6 +11,11 @@ export type FormInputProps = {
   error: string | undefined;
 };
 
+// Message
+export type MessageProps = {
+  message: string;
+};
+
 // AuthContext
 export type AuthContext = {
   isAuthenticated: boolean;
@@ -35,19 +40,52 @@ export type NotFoundPageProps = {
 };
 
 // ProfilePage
-export type UserProfile = {
+export type UserAbout = {
   id: string;
   name: string;
-  email: string;
   bio: string;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type UserResponse = {
+export type UserAboutResponse = {
   success: boolean;
   message: string;
   user: UserProfile;
+};
+
+export type UserPosts = {
+  id: string;
+  authorId: string;
+  title: string;
+  content: string;
+  published: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  author: { name: string };
+};
+
+export type UserPostsResponse = {
+  success: boolean;
+  message: string;
+  posts: UserPosts[];
+};
+
+export type UserComments = {
+  id: string;
+  userId: string;
+  content: string;
+  postId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  post: { title: string };
+  user: { name: string };
+};
+
+export type UserCommentsResponse = {
+  success: boolean;
+  message: string;
+  comments: UserComments[];
 };
 
 // SignInPage
@@ -66,4 +104,9 @@ export type SignInResponse = {
 export type SignUpResponse = {
   success: boolean;
   message: string;
+};
+
+// Params
+export type Params = {
+  userId: string;
 };
