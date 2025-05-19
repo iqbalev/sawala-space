@@ -4,6 +4,7 @@ import { SignUpFormData, signUpSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SignUpResponse } from "../types";
 import FormInput from "../components/FormInput";
+import Button from "../components/Button";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -102,13 +103,12 @@ const SignUpPage = () => {
           />
         </div>
 
-        <button
+        <Button
+          label={isSubmitting ? "Submitting..." : "Sign Up"}
           type="submit"
           disabled={isSubmitting}
           className="rounded-xl bg-blue-400 p-3 text-xl font-semibold text-white transition-all duration-200 hover:bg-blue-400/80 active:scale-95"
-        >
-          {isSubmitting ? "Submitting..." : "Sign Up"}
-        </button>
+        />
       </form>
     </div>
   );

@@ -9,6 +9,7 @@ import {
   CloseIcon,
   BurgerIcon,
 } from "./Icons";
+import Button from "./Button";
 
 const Navbar = () => {
   const { isAuthenticated, signOut } = useAuth();
@@ -44,10 +45,17 @@ const Navbar = () => {
       <div className="relative hidden sm:flex">
         {isAuthenticated && user ? (
           <>
-            <button onClick={toggleDropdown} className="flex items-center">
-              <UserInitialIcon userName={user.name} size="sm" />
-              <ChevronDownIcon />
-            </button>
+            <Button
+              label={
+                <>
+                  <UserInitialIcon userName={user.name} size="sm" />
+                  <ChevronDownIcon />
+                </>
+              }
+              type="button"
+              onClick={toggleDropdown}
+              className="flex items-center"
+            />
 
             {isDropdownOpen && (
               <ul className="absolute top-12 right-0 flex w-40 flex-col rounded-xl bg-gray-100 shadow-sm">
@@ -62,17 +70,16 @@ const Navbar = () => {
                 </li>
 
                 <li className="w-full rounded-b-xl transition-all duration-100 hover:bg-blue-400 hover:text-white">
-                  <button
+                  <Button
+                    label="Sign Out"
+                    type="button"
                     onClick={() => {
                       closeDropdown();
-                      navigate("/sign-in");
                       signOut();
+                      navigate("/sign-in");
                     }}
-                    type="button"
                     className="w-full p-2 text-left"
-                  >
-                    Sign Out
-                  </button>
+                  />
                 </li>
               </ul>
             )}
@@ -124,17 +131,16 @@ const Navbar = () => {
               </li>
 
               <li className="transition-all duration-100 hover:bg-blue-400 hover:text-white">
-                <button
+                <Button
+                  label="Sign Out"
+                  type="button"
                   onClick={() => {
-                    signOut();
                     closeMobileMenu();
+                    signOut();
                     navigate("/sign-in");
                   }}
-                  type="button"
                   className="block w-full p-2.5 text-left"
-                >
-                  Sign Out
-                </button>
+                />
               </li>
             </>
           ) : (
@@ -170,9 +176,12 @@ const Navbar = () => {
         </ul>
       )}
 
-      <button onClick={toggleMobileMenu} className="sm:hidden">
-        {isMobileMenuOpen ? <CloseIcon /> : <BurgerIcon />}
-      </button>
+      <Button
+        label={isMobileMenuOpen ? <CloseIcon /> : <BurgerIcon />}
+        type="button"
+        onClick={toggleMobileMenu}
+        className="sm:hidden"
+      />
     </nav>
   );
 };

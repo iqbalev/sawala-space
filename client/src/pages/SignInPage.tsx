@@ -5,6 +5,7 @@ import { SignInFormData, signInSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { SignInResponse } from "../types";
 import FormInput from "../components/FormInput";
+import Button from "../components/Button";
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -78,13 +79,12 @@ const SignInPage = () => {
           />
         </div>
 
-        <button
+        <Button
+          label={isSubmitting ? "Submitting..." : "Sign In"}
           type="submit"
           disabled={isSubmitting}
           className="rounded-xl bg-blue-400/100 p-3 text-xl font-semibold text-white transition-all duration-200 hover:bg-blue-400/80 active:scale-95"
-        >
-          {isSubmitting ? "Submitting..." : "Sign In"}
-        </button>
+        />
 
         <p className="text-center">
           Don't have an account?

@@ -1,5 +1,15 @@
 import { UseFormRegisterReturn } from "react-hook-form";
-import { ReactNode } from "react";
+import { JSX, ReactNode } from "react";
+
+// Button
+export type ButtonTypeAttribute = "button" | "reset" | "submit";
+export type ButtonProps = {
+  label: string | JSX.Element;
+  type: ButtonTypeAttribute;
+  disabled?: boolean;
+  onClick?: () => void;
+  className?: string;
+};
 
 // FormInput
 export type InputTypeAttribute = "email" | "password" | "text";
