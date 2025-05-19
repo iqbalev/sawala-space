@@ -1,3 +1,5 @@
+import { UserInitialIconProps } from "../types/index";
+
 export const BurgerIcon = () => {
   return (
     <svg
@@ -12,7 +14,7 @@ export const BurgerIcon = () => {
   );
 };
 
-export const ChevronIconDown = () => {
+export const ChevronDownIcon = () => {
   return (
     <svg
       width="25px"
@@ -40,7 +42,7 @@ export const ChevronIconDown = () => {
   );
 };
 
-export const ChevronIconUp = () => {
+export const ChevronUpIcon = () => {
   return (
     <svg
       width="25px"
@@ -87,104 +89,48 @@ export const CloseIcon = () => {
   );
 };
 
-export const UserIconBig = () => {
-  return (
-    <svg
-      width="100px"
-      height="100px"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-      <g
-        id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ></g>
-      <g id="SVGRepo_iconCarrier">
-        <path
-          opacity="0.5"
-          d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-          fill="#1C274C"
-        ></path>
-        <path
-          d="M16.807 19.0112C15.4398 19.9504 13.7841 20.5 12 20.5C10.2159 20.5 8.56023 19.9503 7.193 19.0111C6.58915 18.5963 6.33109 17.8062 6.68219 17.1632C7.41001 15.8302 8.90973 15 12 15C15.0903 15 16.59 15.8303 17.3178 17.1632C17.6689 17.8062 17.4108 18.5964 16.807 19.0112Z"
-          fill="#1C274C"
-        ></path>
-        <path
-          d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3432 6 9.00004 7.34315 9.00004 9C9.00004 10.6569 10.3432 12 12 12Z"
-          fill="#1C274C"
-        ></path>
-      </g>
-    </svg>
-  );
-};
+export const UserInitialIcon = ({ userName, size }: UserInitialIconProps) => {
+  let nameInitial: string;
+  let dimensionsSize;
+  let textSize;
 
-export const UserIconSmall = () => {
-  return (
-    <svg
-      width="30px"
-      height="30px"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-      <g
-        id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ></g>
-      <g id="SVGRepo_iconCarrier">
-        <path
-          opacity="0.5"
-          d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-          fill="#1C274C"
-        ></path>
-        <path
-          d="M16.807 19.0112C15.4398 19.9504 13.7841 20.5 12 20.5C10.2159 20.5 8.56023 19.9503 7.193 19.0111C6.58915 18.5963 6.33109 17.8062 6.68219 17.1632C7.41001 15.8302 8.90973 15 12 15C15.0903 15 16.59 15.8303 17.3178 17.1632C17.6689 17.8062 17.4108 18.5964 16.807 19.0112Z"
-          fill="#1C274C"
-        ></path>
-        <path
-          d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3432 6 9.00004 7.34315 9.00004 9C9.00004 10.6569 10.3432 12 12 12Z"
-          fill="#1C274C"
-        ></path>
-      </g>
-    </svg>
-  );
-};
+  const userNameArray = userName.split(" ");
+  if (userNameArray.length < 3) {
+    nameInitial = userNameArray
+      .map((initial: string) => initial.charAt(0))
+      .join("")
+      .toUpperCase();
+  } else {
+    nameInitial = userNameArray
+      .slice(0, 2)
+      .map((initial: string) => initial.charAt(0))
+      .join("")
+      .toUpperCase();
+  }
 
-export const UserIconExtraSmall = () => {
+  switch (size) {
+    case "xs":
+      textSize = "text-xs";
+      dimensionsSize = "h-5 w-5";
+      break;
+    case "sm":
+      textSize = "text-sm";
+      dimensionsSize = "h-7 w-7";
+      break;
+    case "xl":
+      textSize = "text-4xl";
+      dimensionsSize = "h-20 w-20";
+      break;
+    default:
+      textSize = "text-sm";
+      dimensionsSize = "h-7 w-7";
+  }
+
   return (
-    <svg
-      width="20px"
-      height="20px"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <div
+      className={`flex ${dimensionsSize} flex-col items-center justify-center rounded-full bg-gray-300`}
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-      <g
-        id="SVGRepo_tracerCarrier"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ></g>
-      <g id="SVGRepo_iconCarrier">
-        <path
-          opacity="0.5"
-          d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-          fill="#1C274C"
-        ></path>
-        <path
-          d="M16.807 19.0112C15.4398 19.9504 13.7841 20.5 12 20.5C10.2159 20.5 8.56023 19.9503 7.193 19.0111C6.58915 18.5963 6.33109 17.8062 6.68219 17.1632C7.41001 15.8302 8.90973 15 12 15C15.0903 15 16.59 15.8303 17.3178 17.1632C17.6689 17.8062 17.4108 18.5964 16.807 19.0112Z"
-          fill="#1C274C"
-        ></path>
-        <path
-          d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3432 6 9.00004 7.34315 9.00004 9C9.00004 10.6569 10.3432 12 12 12Z"
-          fill="#1C274C"
-        ></path>
-      </g>
-    </svg>
+      <div className={`${textSize} text-blue-400`}>{nameInitial}</div>
+    </div>
   );
 };

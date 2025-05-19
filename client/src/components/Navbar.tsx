@@ -1,11 +1,18 @@
 import { useAuth } from "../contexts/AuthContext";
+import { useUser } from "../contexts/UserContext";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router";
-import { UserIconSmall, ChevronIconDown, CloseIcon, BurgerIcon } from "./Icons";
+import {
+  UserInitialIcon,
+  ChevronDownIcon,
+  CloseIcon,
+  BurgerIcon,
+} from "./Icons";
 
 const Navbar = () => {
-  const { isAuthenticated, userId, signOut } = useAuth();
+  const { isAuthenticated, signOut } = useAuth();
+  const { user } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -35,11 +42,11 @@ const Navbar = () => {
 
       {/* Desktop Menu */}
       <div className="relative hidden sm:flex">
-        {isAuthenticated && userId ? (
+        {isAuthenticated && user ? (
           <>
             <button onClick={toggleDropdown} className="flex items-center">
-              <UserIconSmall />
-              <ChevronIconDown />
+              <UserInitialIcon userName={user.name} size="sm" />
+              <ChevronDownIcon />
             </button>
 
             {isDropdownOpen && (
@@ -47,7 +54,7 @@ const Navbar = () => {
                 <li className="w-full rounded-t-xl transition-all duration-100 hover:bg-blue-400 hover:text-white">
                   <Link
                     onClick={closeDropdown}
-                    to={`/profile/${userId}`}
+                    to={`/profile/${user.id}`}
                     className="block p-2"
                   >
                     Profile
@@ -96,7 +103,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <ul className="absolute top-0 flex h-dvh w-10/12 flex-col rounded-xl bg-gray-100 text-left text-lg shadow-sm sm:hidden">
-          {isAuthenticated && userId ? (
+          {isAuthenticated && user ? (
             <>
               <li
                 onClick={closeMobileMenu}
@@ -111,7 +118,7 @@ const Navbar = () => {
                 onClick={closeMobileMenu}
                 className="transition-all duration-100 hover:bg-blue-400 hover:text-white"
               >
-                <Link to={`/profile/${userId}`} className="block w-full p-2.5">
+                <Link to={`/profile/${user.id}`} className="block w-full p-2.5">
                   Profile
                 </Link>
               </li>

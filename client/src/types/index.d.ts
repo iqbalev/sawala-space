@@ -11,6 +11,12 @@ export type FormInputProps = {
   error: string | undefined;
 };
 
+// Icons
+export type UserInitialIconProps = {
+  userName: string;
+  size: "xs" | "sm" | "xl";
+};
+
 // Message
 export type MessageProps = {
   message: string;
@@ -20,7 +26,7 @@ export type MessageProps = {
 export type AuthContext = {
   isAuthenticated: boolean;
   userId: string | null;
-  setUserId: React.Dispatch<React.SetStateAction<User | null>>;
+  setUserId: React.Dispatch<React.SetStateAction<string | null>>;
   signIn: (token: string) => void;
   signOut: () => void;
 };
@@ -34,13 +40,19 @@ export type JwtPayload = {
   id: string;
 };
 
-// NotFoundPage
-export type NotFoundPageProps = {
-  message: string;
+// UserContext
+export type UserContext = {
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  error: string | null;
+  isLoading: boolean;
 };
 
-// ProfilePage
-export type UserAbout = {
+export type UserProviderProps = {
+  children: ReactNode;
+};
+
+export type User = {
   id: string;
   name: string;
   bio: string;
@@ -48,13 +60,19 @@ export type UserAbout = {
   updatedAt: Date;
 };
 
-export type UserAboutResponse = {
+export type UserResponse = {
   success: boolean;
   message: string;
-  user: UserProfile;
+  user: User;
 };
 
-export type UserPosts = {
+// NotFoundPage
+export type NotFoundPageProps = {
+  message: string;
+};
+
+// ProfilePage
+export type Post = {
   id: string;
   authorId: string;
   title: string;
@@ -65,13 +83,13 @@ export type UserPosts = {
   author: { name: string };
 };
 
-export type UserPostsResponse = {
+export type PostsResponse = {
   success: boolean;
   message: string;
-  posts: UserPosts[];
+  posts: Post[];
 };
 
-export type UserComments = {
+export type Comment = {
   id: string;
   userId: string;
   content: string;
@@ -82,10 +100,10 @@ export type UserComments = {
   user: { name: string };
 };
 
-export type UserCommentsResponse = {
+export type CommentsResponse = {
   success: boolean;
   message: string;
-  comments: UserComments[];
+  comments: Comment[];
 };
 
 // SignInPage

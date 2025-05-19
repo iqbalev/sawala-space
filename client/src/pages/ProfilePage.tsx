@@ -1,14 +1,14 @@
 import { useParams, useLocation, Outlet, Link } from "react-router";
 import { useState, useEffect } from "react";
 import type {
-  UserAbout,
-  UserAboutResponse,
-  UserPosts,
-  UserPostsResponse,
-  UserComments,
-  UserCommentsResponse,
+  User,
+  UserResponse,
+  Post,
+  PostsResponse,
+  Comment,
+  CommentsResponse,
 } from "../types";
-import { UserIconBig, UserIconExtraSmall } from "../components/Icons";
+import { UserInitialIcon } from "../components/Icons";
 import { formatDate } from "../utils";
 import { NavLink } from "react-router";
 import LoadingScreen from "../components/LoadingScreen";
@@ -17,24 +17,24 @@ import Message from "../components/Message";
 
 export const ProfilePage = () => {
   const { userId } = useParams();
-  const [about, setAbout] = useState<UserAbout | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
-    const getUserAbout = async () => {
+    const getUser = async () => {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/users/${userId}`,
         );
 
-        const data: UserAboutResponse = await response.json();
+        const data: UserResponse = await response.json();
         if (!response.ok) {
           setError(data.message);
-          setAbout(null);
+          setUser(null);
         } else {
-          setAbout(data.user);
+          setUser(data.user);
         }
       } catch (error) {
         console.error(error);
@@ -44,11 +44,11 @@ export const ProfilePage = () => {
       }
     };
 
-    getUserAbout();
+    getUser();
   }, [userId]);
 
   if (isLoading) return <LoadingScreen />;
-  if (!about) {
+  if (!user) {
     return (
       <NotFoundPage message="The user you’re looking for doesn’t exist. It might have been moved or the URL could be incorrect." />
     );
@@ -57,14 +57,14 @@ export const ProfilePage = () => {
   if (error) return <Message message={error} />;
 
   return (
-    <div className="flex flex-col gap-6">
-      <section className="flex flex-col items-center gap-2 sm:flex-row">
-        <UserIconBig />
+    <div className="flex flex-col gap-8">
+      <section className="flex flex-col items-center gap-3 sm:flex-row">
+        <UserInitialIcon userName={user.name} size="xl" />
         <div className="flex flex-col items-center sm:items-baseline">
-          <p className="text-xl font-semibold">{about.name}</p>
-          <p>{about.bio}</p>
-          <p className="text-black/60">
-            Joined on {formatDate(about.createdAt)}
+          <p className="text-xl font-semibold">{user.name}</p>
+          <p>{user.bio}</p>
+          <p className="text-sm text-black/60">
+            Joined on {formatDate(user.createdAt)}
           </p>
         </div>
       </section>
@@ -106,18 +106,18 @@ export const ProfilePage = () => {
 
 export const ProfilePostsPage = () => {
   const { userId } = useParams();
-  const [posts, setPosts] = useState<UserPosts[] | null>(null);
+  const [posts, setPosts] = useState<Post[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getUserPosts = async () => {
+    const getPosts = async () => {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/users/${userId}/posts`,
         );
 
-        const data: UserPostsResponse = await response.json();
+        const data: PostsResponse = await response.json();
         if (!response.ok) {
           setError(data.message);
           setPosts(null);
@@ -132,7 +132,7 @@ export const ProfilePostsPage = () => {
       }
     };
 
-    getUserPosts();
+    getPosts();
   }, [userId]);
 
   if (isLoading) return <LoadingScreen />;
@@ -160,7 +160,7 @@ export const ProfilePostsPage = () => {
                 </Link>
 
                 <div className="flex items-center gap-1">
-                  <UserIconExtraSmall />
+                  <UserInitialIcon userName={post.author.name} size="xs" />
                   <Link
                     to={`/profile/${post.authorId}`}
                     className="text-sm text-black/60 transition-all duration-200 hover:text-blue-400"
@@ -182,7 +182,7 @@ export const ProfilePostsPage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-end px-4 py-2 text-xs text-black/60">
+            <div className="flex flex-col items-end px-4 py-2 text-sm text-black/60">
               <p>Uploaded on {formatDate(post.createdAt)}</p>
               <p>Last updated on {formatDate(post.updatedAt)}</p>
             </div>
@@ -194,18 +194,18 @@ export const ProfilePostsPage = () => {
 
 export const ProfileCommentsPage = () => {
   const { userId } = useParams();
-  const [comments, setComments] = useState<UserComments[] | null>(null);
+  const [comments, setComments] = useState<Comment[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getUserComments = async () => {
+    const getComments = async () => {
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/users/${userId}/comments`,
         );
 
-        const data: UserCommentsResponse = await response.json();
+        const data: CommentsResponse = await response.json();
         if (!response.ok) {
           setError(data.message);
           setComments(null);
@@ -220,7 +220,7 @@ export const ProfileCommentsPage = () => {
       }
     };
 
-    getUserComments();
+    getComments();
   }, [userId]);
 
   if (isLoading) return <LoadingScreen />;
@@ -246,7 +246,7 @@ export const ProfileCommentsPage = () => {
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-1 text-sm text-black/60">
-              <UserIconExtraSmall />
+              <UserInitialIcon userName={comment.user.name} size="xs" />
               <Link
                 to={`/profile/${comment.userId}`}
                 className="transition-all duration-200 hover:text-blue-400"
