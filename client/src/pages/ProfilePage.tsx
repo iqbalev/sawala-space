@@ -60,7 +60,7 @@ export const ProfilePage = () => {
     <div className="flex flex-col gap-8">
       <section className="flex flex-col items-center gap-3 sm:flex-row">
         <UserInitialIcon userName={user.name} size="xl" />
-        <div className="flex flex-col items-center sm:items-baseline">
+        <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
           <p className="text-xl font-semibold">{user.name}</p>
           <p>{user.bio}</p>
           <p className="text-sm text-black/60">
@@ -234,8 +234,12 @@ export const ProfileCommentsPage = () => {
       {comments.map((comment) => (
         <article key={comment.id} className="flex flex-col gap-1">
           <div className="flex items-center gap-1">
-            <span className="text-sm text-black/60">Commented on</span>
-            <span className="text-sm text-black/60">&mdash;</span>
+            <span className="hidden text-sm text-black/60 sm:inline">
+              Commented on
+            </span>
+            <span className="hidden text-sm text-black/60 sm:inline">
+              &mdash;
+            </span>
             <Link
               to={`/posts/${comment.postId}`}
               className="font-semibold transition-all duration-200 hover:text-blue-400"

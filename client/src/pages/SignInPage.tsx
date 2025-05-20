@@ -45,7 +45,7 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="mx-auto flex min-h-[80dvh] w-full max-w-lg flex-col justify-center gap-4">
+    <div className="mx-auto flex min-h-[70dvh] w-full max-w-lg flex-col justify-center gap-4">
       <section className="flex flex-col gap-2 rounded-xl text-center">
         <h1 className="text-4xl font-semibold">Continue Your Journey</h1>
       </section>

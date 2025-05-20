@@ -57,32 +57,32 @@ const Navbar = () => {
               className="flex items-center"
             />
 
-            {isDropdownOpen && (
-              <ul className="absolute top-12 right-0 flex w-40 flex-col rounded-xl bg-gray-100 shadow-sm">
-                <li className="w-full rounded-t-xl transition-all duration-100 hover:bg-blue-400 hover:text-white">
-                  <Link
-                    onClick={closeDropdown}
-                    to={`/profile/${user.id}`}
-                    className="block p-2"
-                  >
-                    Profile
-                  </Link>
-                </li>
+            <ul
+              className={`absolute top-16 right-0 flex min-h-full w-40 flex-col rounded-xl bg-gray-100 shadow-sm transition-all duration-200 ${isDropdownOpen ? "max-h-20 opacity-100" : "max-h-0 overflow-hidden opacity-0"}`}
+            >
+              <li className="w-full rounded-t-xl transition-all duration-100 hover:bg-blue-400 hover:text-white">
+                <Link
+                  onClick={closeDropdown}
+                  to={`/profile/${user.id}`}
+                  className="block p-2"
+                >
+                  Profile
+                </Link>
+              </li>
 
-                <li className="w-full rounded-b-xl transition-all duration-100 hover:bg-blue-400 hover:text-white">
-                  <Button
-                    label="Sign Out"
-                    type="button"
-                    onClick={() => {
-                      closeDropdown();
-                      signOut();
-                      navigate("/sign-in");
-                    }}
-                    className="w-full p-2 text-left"
-                  />
-                </li>
-              </ul>
-            )}
+              <li className="w-full rounded-b-xl transition-all duration-100 hover:bg-blue-400 hover:text-white">
+                <Button
+                  label="Sign Out"
+                  type="button"
+                  onClick={() => {
+                    closeDropdown();
+                    signOut();
+                    navigate("/sign-in");
+                  }}
+                  className="w-full p-2 text-left"
+                />
+              </li>
+            </ul>
           </>
         ) : (
           <ul className="flex gap-8 sm:items-center">
@@ -108,73 +108,73 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <ul className="absolute top-0 flex h-dvh w-10/12 flex-col rounded-xl bg-gray-100 text-left text-lg shadow-sm sm:hidden">
-          {isAuthenticated && user ? (
-            <>
-              <li
-                onClick={closeMobileMenu}
-                className="rounded-t-xl transition-all duration-100 hover:bg-blue-400 hover:text-white"
-              >
-                <Link to="/" className="block w-full p-2.5">
-                  Home
-                </Link>
-              </li>
+      <ul
+        className={`fixed top-0 left-0 flex min-h-dvh w-full flex-col rounded-xl bg-gray-100 text-left text-lg shadow-sm transition-all duration-200 sm:hidden ${isMobileMenuOpen ? "max-w-[75%] opacity-100" : "max-w-0 overflow-hidden opacity-0"}`}
+      >
+        {isAuthenticated && user ? (
+          <>
+            <li
+              onClick={closeMobileMenu}
+              className="rounded-tr-xl transition-all duration-100 hover:bg-blue-400 hover:text-white"
+            >
+              <Link to="/" className="block w-full p-8">
+                Home
+              </Link>
+            </li>
 
-              <li
-                onClick={closeMobileMenu}
-                className="transition-all duration-100 hover:bg-blue-400 hover:text-white"
-              >
-                <Link to={`/profile/${user.id}`} className="block w-full p-2.5">
-                  Profile
-                </Link>
-              </li>
+            <li
+              onClick={closeMobileMenu}
+              className="transition-all duration-100 hover:bg-blue-400 hover:text-white"
+            >
+              <Link to={`/profile/${user.id}`} className="block w-full p-8">
+                Profile
+              </Link>
+            </li>
 
-              <li className="transition-all duration-100 hover:bg-blue-400 hover:text-white">
-                <Button
-                  label="Sign Out"
-                  type="button"
-                  onClick={() => {
-                    closeMobileMenu();
-                    signOut();
-                    navigate("/sign-in");
-                  }}
-                  className="block w-full p-2.5 text-left"
-                />
-              </li>
-            </>
-          ) : (
-            <>
-              <li
-                onClick={closeMobileMenu}
-                className="transition-all duration-100 hover:rounded-xl hover:bg-blue-400 hover:text-white"
-              >
-                <Link to="/" className="block w-full p-2.5">
-                  Home
-                </Link>
-              </li>
+            <li className="transition-all duration-100 hover:bg-blue-400 hover:text-white">
+              <Button
+                label="Sign Out"
+                type="button"
+                onClick={() => {
+                  closeMobileMenu();
+                  signOut();
+                  navigate("/sign-in");
+                }}
+                className="block w-full p-8 text-left"
+              />
+            </li>
+          </>
+        ) : (
+          <>
+            <li
+              onClick={closeMobileMenu}
+              className="rounded-tr-xl transition-all duration-100 hover:bg-blue-400 hover:text-white"
+            >
+              <Link to="/" className="block w-full p-8">
+                Home
+              </Link>
+            </li>
 
-              <li
-                onClick={closeMobileMenu}
-                className="transition-all duration-100 hover:rounded-xl hover:bg-blue-400 hover:text-white"
-              >
-                <Link to="/sign-in" className="block w-full p-2.5">
-                  Sign In
-                </Link>
-              </li>
+            <li
+              onClick={closeMobileMenu}
+              className="transition-all duration-100 hover:bg-blue-400 hover:text-white"
+            >
+              <Link to="/sign-in" className="block w-full p-8">
+                Sign In
+              </Link>
+            </li>
 
-              <li
-                onClick={closeMobileMenu}
-                className="transition-all duration-100 hover:rounded-xl hover:bg-blue-400 hover:text-white"
-              >
-                <Link to="/sign-up" className="block w-full p-2.5">
-                  Sign Up
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      )}
+            <li
+              onClick={closeMobileMenu}
+              className="transition-all duration-100 hover:bg-blue-400 hover:text-white"
+            >
+              <Link to="/sign-up" className="block w-full p-8">
+                Sign Up
+              </Link>
+            </li>
+          </>
+        )}
+      </ul>
 
       <Button
         label={isMobileMenuOpen ? <CloseIcon /> : <BurgerIcon />}

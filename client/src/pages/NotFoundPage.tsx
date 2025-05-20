@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const NotFoundPage = ({ message }: NotFoundPageProps) => {
   return (
-    <div className="flex min-h-[80dvh] flex-col items-center justify-center gap-4">
+    <div className="flex min-h-[70dvh] flex-col items-center justify-center gap-4">
       <section className="flex flex-col gap-1 text-center">
         <h2>404 - Error</h2>
         <h1 className="text-xl font-semibold uppercase">Page not found</h1>
