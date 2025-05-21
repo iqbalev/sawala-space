@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getAllPosts,
   getCommentsById,
   createPost,
   createComment,
@@ -10,6 +11,7 @@ import { createPostSchema, createCommentSchema } from "../schema/index.js";
 
 const postsRouter = Router();
 
+postsRouter.get("/posts/", getAllPosts);
 postsRouter.get("/posts/:id/comments", getCommentsById);
 postsRouter.post(
   "/posts",

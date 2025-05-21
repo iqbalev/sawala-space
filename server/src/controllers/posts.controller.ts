@@ -1,7 +1,53 @@
 import { Request, Response } from "express";
-import { Params } from "../types/index.js";
+import { Query, Params } from "../types/index.js";
 import { prisma } from "../lib/index.js";
 import { CreatePostReqBody, CreateCommentReqBody } from "../schema/index.js";
+
+export const getAllPosts = async (
+  req: Request<{}, {}, {}, Query>,
+  res: Response
+) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 5;
+  if (page < 1 || limit < 1) {
+    res
+      .status(400)
+      .json({
+        success: false,
+        message: "Page and limit query parameters must be positive numbers",
+      });
+
+    return;
+  }
+
+  const offset = (page - 1) * limit;
+
+  try {
+    const posts = await prisma.post.findMany({
+      skip: offset,
+      take: limit,
+      orderBy: { createdAt: "desc" },
+      include: { author: { select: { name: true } } },
+    });
+
+    const totalPosts = await prisma.post.count();
+
+    res.status(200).json({
+      success: true,
+      message:
+        posts.length === 0
+          ? "There are no posts available"
+          : "All posts successfully retrieved",
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+      totalPosts,
+      posts,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+    return;
+  }
+};
 
 export const getCommentsById = async (
   req: Request<Params, {}, {}>,

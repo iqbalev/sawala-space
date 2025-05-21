@@ -12,3 +12,8 @@ declare global {
 export type Params = {
   id: string;
 };
+
+export type Query = {
+  page?: string;
+  limit?: string;
+};
