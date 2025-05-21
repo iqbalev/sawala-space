@@ -36,8 +36,10 @@ export type LoadingScreenProps = {
 // Message
 export type MessageProps = {
   message: string;
+  className?: string;
 };
 
+// -- CONTEXT TYPES -- //
 // AuthContext
 export type AuthContext = {
   isAuthenticated: boolean;
