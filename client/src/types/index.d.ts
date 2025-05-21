@@ -1,6 +1,7 @@
 import { UseFormRegisterReturn } from "react-hook-form";
 import { JSX, ReactNode } from "react";
 
+// -- COMPONENT TYPES -- //
 // Button
 export type ButtonTypeAttribute = "button" | "reset" | "submit";
 export type ButtonProps = {
@@ -25,6 +26,11 @@ export type FormInputProps = {
 export type UserInitialIconProps = {
   userName: string;
   size: "xs" | "sm" | "xl";
+};
+
+// LoadingScreen
+export type LoadingScreenProps = {
+  className?: string;
 };
 
 // Message
@@ -76,6 +82,7 @@ export type UserResponse = {
   user: User;
 };
 
+// -- PAGE TYPES -- //
 // NotFoundPage
 export type NotFoundPageProps = {
   message: string;
@@ -134,6 +141,7 @@ export type SignUpResponse = {
   message: string;
 };
 
+// -- OTHER TYPES -- //
 // Params
 export type Params = {
   userId: string;
