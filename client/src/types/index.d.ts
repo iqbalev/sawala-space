@@ -39,6 +39,11 @@ export type MessageProps = {
   className?: string;
 };
 
+// PostCard
+export type PostCardProps = {
+  post: Post;
+};
+
 // -- CONTEXT TYPES -- //
 // AuthContext
 export type AuthContext = {
