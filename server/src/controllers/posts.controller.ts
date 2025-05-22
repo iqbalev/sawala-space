@@ -10,12 +10,10 @@ export const getAllPosts = async (
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 5;
   if (page < 1 || limit < 1) {
-    res
-      .status(400)
-      .json({
-        success: false,
-        message: "Page and limit query parameters must be positive numbers",
-      });
+    res.status(400).json({
+      success: false,
+      message: "Page and limit query parameters must be positive numbers",
+    });
 
     return;
   }
@@ -28,9 +26,10 @@ export const getAllPosts = async (
       take: limit,
       orderBy: { createdAt: "desc" },
       include: { author: { select: { name: true } } },
+      where: { published: true },
     });
 
-    const totalPosts = await prisma.post.count();
+    const totalPosts = await prisma.post.count({ where: { published: true } });
 
     res.status(200).json({
       success: true,
