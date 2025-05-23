@@ -48,6 +48,31 @@ export const getAllPosts = async (
   }
 };
 
+export const getPostById = async (
+  req: Request<Params, {}, {}>,
+  res: Response
+) => {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: req.params.id, published: true },
+      include: { author: { select: { name: true } } },
+    });
+
+    if (!post) {
+      res.status(404).json({ success: false, message: "Post is not found" });
+      return;
+    }
+
+    res
+      .status(200)
+      .json({ success: true, message: "Post successfully retrieved", post });
+    return;
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+    return;
+  }
+};
+
 export const getCommentsById = async (
   req: Request<Params, {}, {}>,
   res: Response
