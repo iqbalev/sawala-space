@@ -1,66 +1,85 @@
-import { Request, Response } from "express";
-import { Params } from "../types/index.js";
+import type { Request, Response } from "express";
+import type { Params } from "../types/index.js";
+import type {
+  NameReqBody,
+  BioReqBody,
+  PasswordReqBody,
+} from "../schema/index.js";
 import { prisma } from "../lib/index.js";
-import { NameReqBody, PasswordReqBody, BioReqBody } from "../schema/index.js";
 import bcrypt from "bcryptjs";
 
-export const getProfileById = async (
+export const getProfile = async (
   req: Request<Params, {}, {}>,
   res: Response
 ) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: req.params.id } });
-    if (!user) {
-      res.status(404).json({ success: false, message: "User is not found" });
+    const profile = await prisma.user.findUnique({
+      where: { id: req.params.id },
+    });
+
+    if (!profile) {
+      res.status(404).json({
+        success: false,
+        message: "Profile not found",
+      });
       return;
     }
 
     // req.user is optionally set by isOptionallyAuthenticated middleware IF the user is signed in
+    // Return full profile if user IS authenticated and it's theirs
     if (req.params.id === req.user?.id) {
-      // Return full profile if user IS authenticated and it's theirs
       res.status(200).json({
         success: true,
-        message: "User profiles successfully retrieved",
-        user,
+        message: "Profile retrieved successfully",
+        user: profile,
       });
-
-      return;
-    } else {
-      const { email, password, ...publicProfile } = user;
-      // Return public profile only otherwise
-      res.status(200).json({
-        success: true,
-        message: "User profiles successfully retrieved",
-        user: publicProfile,
-      });
-
       return;
     }
+
+    // Return public profile otherwise
+    const { email, password, ...publicProfile } = profile;
+    res.status(200).json({
+      success: true,
+      message: "Profile retrieved successfully",
+      user: publicProfile,
+    });
+    return;
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
     return;
   }
 };
 
-export const getPostsById = async (
+export const getPostsByUser = async (
   req: Request<Params, {}, {}>,
   res: Response
 ) => {
   try {
     const user = await prisma.user.findUnique({
-      where: {
-        id: req.params.id,
-      },
+      where: { id: req.params.id },
     });
 
     if (!user) {
-      res.status(404).json({ success: false, message: "User is not found" });
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
       return;
     }
 
     const posts = await prisma.post.findMany({
       where: { authorId: req.params.id },
-      include: { author: { select: { name: true } } },
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
 
@@ -68,39 +87,51 @@ export const getPostsById = async (
       success: true,
       message:
         posts.length === 0
-          ? "This user has no post(s) yet"
-          : "Post(s) successfully retrieved",
+          ? "No posts found for this user"
+          : "Posts retrieved successfully",
       posts,
     });
-
     return;
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
     return;
   }
 };
 
-export const getCommentsById = async (
+export const getCommentsByUser = async (
   req: Request<Params, {}, {}>,
   res: Response
 ) => {
   try {
     const user = await prisma.user.findUnique({
-      where: {
-        id: req.params.id,
-      },
+      where: { id: req.params.id },
     });
 
     if (!user) {
-      res.status(404).json({ success: false, message: "User is not found" });
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
       return;
     }
 
     const comments = await prisma.comment.findMany({
       where: { userId: req.params.id },
       include: {
-        post: { select: { title: true } },
-        user: { select: { name: true } },
+        post: {
+          select: {
+            title: true,
+          },
+        },
+        user: {
+          select: {
+            name: true,
+          },
+        },
       },
       orderBy: { createdAt: "desc" },
     });
@@ -109,49 +140,35 @@ export const getCommentsById = async (
       success: true,
       message:
         comments.length === 0
-          ? "This user has no comment(s) yet"
-          : "Comment(s) successfully retrieved",
+          ? "No comments found for this user"
+          : "Comments retrieved successfully",
       comments,
     });
-
     return;
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
     return;
   }
 };
 
-export const deleteProfileById = async (
-  req: Request<Params, {}, {}>,
-  res: Response
-) => {
-  try {
-    const user = await prisma.user.findUnique({ where: { id: req.params.id } });
-    if (!user) {
-      res.status(404).json({ success: false, message: "User is not found" });
-      return;
-    }
-
-    await prisma.user.delete({ where: { id: req.params.id } });
-    res
-      .status(200)
-      .json({ success: true, message: "Account successfully deleted" });
-
-    return;
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
-    return;
-  }
-};
-
-export const updateNameById = async (
+export const updateUserName = async (
   req: Request<Params, {}, NameReqBody>,
   res: Response
 ) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: req.params.id } });
+    const user = await prisma.user.findUnique({
+      where: { id: req.params.id },
+    });
+
     if (!user) {
-      res.status(404).json({ success: false, message: "User is not found" });
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
       return;
     }
 
@@ -160,7 +177,6 @@ export const updateNameById = async (
         success: false,
         message: "New name must be different from current name",
       });
-
       return;
     }
 
@@ -180,84 +196,34 @@ export const updateNameById = async (
 
     res.status(200).json({
       success: true,
-      message: "Name successfully updated",
+      message: "Name updated successfully",
       user: updatedUser,
     });
-
     return;
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
     return;
   }
 };
 
-export const updatePasswordById = async (
-  req: Request<Params, {}, PasswordReqBody>,
-  res: Response
-) => {
-  const { currentPassword, newPassword } = req.body;
-  try {
-    const user = await prisma.user.findUnique({ where: { id: req.params.id } });
-    if (!user) {
-      res.status(404).json({ success: false, message: "User is not found" });
-      return;
-    }
-
-    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
-    if (!passwordMatch) {
-      res
-        .status(400)
-        .json({ success: false, message: "Invalid current password" });
-
-      return;
-    }
-
-    const sameNewPassword = await bcrypt.compare(newPassword, user.password);
-    if (sameNewPassword) {
-      res.status(400).json({
-        success: false,
-        message: "New password must be different from current password",
-      });
-
-      return;
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    const updatedUser = await prisma.user.update({
-      where: { id: req.params.id },
-      data: {
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-        name: true,
-        bio: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Password successfully updated",
-      user: updatedUser,
-    });
-
-    return;
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
-    return;
-  }
-};
-
-export const updateBioById = async (
+export const updateUserBio = async (
   req: Request<Params, {}, BioReqBody>,
   res: Response
 ) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: req.params.id } });
+    const user = await prisma.user.findUnique({
+      where: { id: req.params.id },
+    });
+
     if (!user) {
-      res.status(404).json({ success: false, message: "User is not found" });
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
       return;
     }
 
@@ -275,13 +241,122 @@ export const updateBioById = async (
 
     res.status(200).json({
       success: true,
-      message: "Bio successfully updated",
+      message: "Bio updated successfully",
       user: updatedUser,
     });
-
     return;
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+    return;
+  }
+};
+
+export const updateUserPassword = async (
+  req: Request<Params, {}, PasswordReqBody>,
+  res: Response
+) => {
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.params.id },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+
+    if (!passwordMatch) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid current password",
+      });
+      return;
+    }
+
+    const sameNewPassword = await bcrypt.compare(newPassword, user.password);
+    if (sameNewPassword) {
+      res.status(400).json({
+        success: false,
+        message: "New password must be different from current password",
+      });
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const updatedUser = await prisma.user.update({
+      where: { id: req.params.id },
+      data: {
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+        name: true,
+        bio: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
+      user: updatedUser,
+    });
+    return;
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+    return;
+  }
+};
+
+export const deleteUser = async (
+  req: Request<Params, {}, {}>,
+  res: Response
+) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.params.id },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+
+    await prisma.user.delete({
+      where: { id: req.params.id },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+    return;
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
     return;
   }
 };

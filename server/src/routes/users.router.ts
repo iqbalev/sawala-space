@@ -1,48 +1,45 @@
 import { Router } from "express";
-import isOptionallyAuthenticated from "../middleware/isOptionallyAuthenticated.js";
 import {
-  getProfileById,
-  getPostsById,
-  getCommentsById,
-  updateNameById,
-  updatePasswordById,
-  updateBioById,
-  deleteProfileById,
+  getProfile,
+  getPostsByUser,
+  getCommentsByUser,
+  updateUserName,
+  updateUserBio,
+  updateUserPassword,
+  deleteUser,
 } from "../controllers/users.controller.js";
+import { nameSchema, bioSchema, passwordSchema } from "../schema/index.js";
+import isOptionallyAuthenticated from "../middleware/isOptionallyAuthenticated.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
 import isOwner from "../middleware/isOwner.js";
 import validate from "../middleware/validate.middleware.js";
-import { nameSchema, passwordSchema, bioSchema } from "../schema/index.js";
 
 const usersRouter = Router();
 
-usersRouter.get("/users/:id", isOptionallyAuthenticated, getProfileById);
-usersRouter.get("/users/:id/posts", getPostsById);
-usersRouter.get("/users/:id/comments", getCommentsById);
+usersRouter.get("/users/:id", isOptionallyAuthenticated, getProfile);
+usersRouter.get("/users/:id/posts", getPostsByUser);
+usersRouter.get("/users/:id/comments", getCommentsByUser);
 usersRouter.patch(
   "/users/:id/name",
   isAuthenticated,
   isOwner,
   validate(nameSchema),
-  updateNameById
+  updateUserName
 );
-
-usersRouter.patch(
-  "/users/:id/password",
-  isAuthenticated,
-  isOwner,
-  validate(passwordSchema),
-  updatePasswordById
-);
-
 usersRouter.patch(
   "/users/:id/bio",
   isAuthenticated,
   isOwner,
   validate(bioSchema),
-  updateBioById
+  updateUserBio
 );
-
-usersRouter.delete("/users/:id", isAuthenticated, isOwner, deleteProfileById);
+usersRouter.patch(
+  "/users/:id/password",
+  isAuthenticated,
+  isOwner,
+  validate(passwordSchema),
+  updateUserPassword
+);
+usersRouter.delete("/users/:id", isAuthenticated, isOwner, deleteUser);
 
 export default usersRouter;
