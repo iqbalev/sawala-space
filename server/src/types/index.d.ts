@@ -16,4 +16,6 @@ export type Params = {
 export type Query = {
   page?: string;
   limit?: string;
+  sort?: "createdAt" | "updatedAt" | "title";
+  order?: "asc" | "desc";
 };

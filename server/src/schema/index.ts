@@ -77,6 +77,25 @@ export const createPostSchema = z.object({
     .nonempty("Please enter your post title")
     .min(5, "Title must be at least 5 characters"),
   content: z.string().trim().nonempty("Please enter your post content"),
+  category: z.enum(
+    [
+      "art",
+      "business",
+      "culinary",
+      "design",
+      "education",
+      "gaming",
+      "humor",
+      "lifestyle",
+      "literature",
+      "music",
+      "programming",
+      "science",
+      "sports",
+      "technology",
+    ],
+    { errorMap: () => ({ message: "Please enter a valid category" }) }
+  ),
   published: z.boolean().optional().default(true),
 });
 

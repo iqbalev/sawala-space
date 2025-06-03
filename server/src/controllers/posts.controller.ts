@@ -11,13 +11,33 @@ export const getAllPosts = async (
   res: Response
 ) => {
   const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 5;
+  const limit = Number(req.query.limit) || 10;
   const offset = (page - 1) * limit;
+  const sort = req.query.sort || "createdAt";
+  const order = req.query.order || "desc";
 
   if (page < 1 || limit < 1) {
     res.status(400).json({
       success: false,
-      message: "Page and limit query parameters must be positive numbers",
+      message: "Page and limit parameters must be positive numbers",
+    });
+    return;
+  }
+
+  const allowedSort = ["createdAt", "updatedAt", "title"];
+  if (!allowedSort.includes(sort)) {
+    res.status(400).json({
+      success: false,
+      message: "Sort parameter must be one of createdAt, updatedAt, or title",
+    });
+    return;
+  }
+
+  const allowedOrder = ["asc", "desc"];
+  if (!allowedOrder.includes(order)) {
+    res.status(400).json({
+      success: false,
+      message: "Order parameter must be asc or desc",
     });
     return;
   }
@@ -26,7 +46,7 @@ export const getAllPosts = async (
     const posts = await prisma.post.findMany({
       skip: offset,
       take: limit,
-      orderBy: { createdAt: "desc" },
+      orderBy: { [sort]: order },
       include: {
         author: {
           select: {
@@ -108,13 +128,14 @@ export const createPost = async (
   res: Response
 ) => {
   try {
-    const { title, content, published } = req.body;
+    const { title, content, category, published } = req.body;
 
     const post = await prisma.post.create({
       data: {
         authorId: req.user!.id, // (!) used because req.user is guaranteed by the isAuthenticated middleware
         title,
         content,
+        category,
         published,
       },
     });
