@@ -101,15 +101,35 @@ export type Post = {
   authorId: string;
   title: string;
   content: string;
+  category: PostCategory;
   published: boolean;
   createdAt: Date;
   updatedAt: Date;
   author: { name: string };
 };
 
+export type PostCategory =
+  | "art"
+  | "business"
+  | "culinary"
+  | "design"
+  | "education"
+  | "gaming"
+  | "humor"
+  | "lifestyle"
+  | "literature"
+  | "music"
+  | "programming"
+  | "science"
+  | "sports"
+  | "technology";
+
 export type PostsResponse = {
   success: boolean;
   message: string;
+  totalPages: number;
+  currentPage: number;
+  totalPosts: number;
   posts: Post[];
 };
 

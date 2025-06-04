@@ -1,13 +1,14 @@
 import { createBrowserRouter } from "react-router";
-import App from "./App";
-import HomePage from "./pages/HomePage";
-import SignUpPage from "./pages/SignUpPage";
-import SignInPage from "./pages/SignInPage";
 import {
   ProfilePage,
   ProfilePostsPage,
   ProfileCommentsPage,
 } from "./pages/ProfilePage";
+import App from "./App";
+import HomePage from "./pages/HomePage";
+import SignUpPage from "./pages/SignUpPage";
+import SignInPage from "./pages/SignInPage";
+import PostsPage from "./pages/PostsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
@@ -18,7 +19,6 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "sign-up", element: <SignUpPage /> },
       { path: "sign-in", element: <SignInPage /> },
-
       {
         path: "profile/:userId",
         element: <ProfilePage />,
@@ -27,6 +27,10 @@ const router = createBrowserRouter([
           { path: "posts", element: <ProfilePostsPage /> },
           { path: "comments", element: <ProfileCommentsPage /> },
         ],
+      },
+      {
+        path: "posts",
+        element: <PostsPage />,
       },
       {
         path: "*",
