@@ -15,6 +15,8 @@ export const getAllPosts = async (
   const offset = (page - 1) * limit;
   const sort = req.query.sort || "createdAt";
   const order = req.query.order || "desc";
+  const allowedSort = ["createdAt", "updatedAt", "title"];
+  const allowedOrder = ["asc", "desc"];
 
   if (page < 1 || limit < 1) {
     res.status(400).json({
@@ -24,7 +26,6 @@ export const getAllPosts = async (
     return;
   }
 
-  const allowedSort = ["createdAt", "updatedAt", "title"];
   if (!allowedSort.includes(sort)) {
     res.status(400).json({
       success: false,
@@ -33,7 +34,6 @@ export const getAllPosts = async (
     return;
   }
 
-  const allowedOrder = ["asc", "desc"];
   if (!allowedOrder.includes(order)) {
     res.status(400).json({
       success: false,
@@ -44,9 +44,7 @@ export const getAllPosts = async (
 
   try {
     const posts = await prisma.post.findMany({
-      skip: offset,
-      take: limit,
-      orderBy: { [sort]: order },
+      where: { published: true },
       include: {
         author: {
           select: {
@@ -54,7 +52,9 @@ export const getAllPosts = async (
           },
         },
       },
-      where: { published: true },
+      skip: offset,
+      take: limit,
+      orderBy: { [sort]: order },
     });
 
     const totalPosts = await prisma.post.count({
@@ -96,6 +96,11 @@ export const getPost = async (req: Request<Params, {}, {}>, res: Response) => {
             name: true,
           },
         },
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
       },
     });
 
@@ -107,10 +112,15 @@ export const getPost = async (req: Request<Params, {}, {}>, res: Response) => {
       return;
     }
 
+    const { _count, ...postWithoutCount } = post;
+
     res.status(200).json({
       success: true,
       message: "Post retrieved successfully",
-      post,
+      post: {
+        ...postWithoutCount,
+        totalComments: _count.comments,
+      },
     });
     return;
   } catch (error) {
@@ -157,9 +167,28 @@ export const createPost = async (
 };
 
 export const getCommentsByPost = async (
-  req: Request<Params, {}, {}>,
+  req: Request<Params, {}, {}, Query>,
   res: Response
 ) => {
+  const sort = req.query.sort || "createdAt";
+  const order = req.query.order || "desc";
+  const allowedSort = ["createdAt", "updatedAt"];
+  const allowedOrder = ["asc", "desc"];
+
+  if (!allowedSort.includes(sort)) {
+    res.status(400).json({
+      success: false,
+      message: "Sort parameter must be createdAt or updatedAt",
+    });
+  }
+
+  if (!allowedOrder.includes(order)) {
+    res.status(400).json({
+      success: false,
+      message: "Order parameter must be asc or desc",
+    });
+  }
+
   try {
     const post = await prisma.post.findUnique({
       where: { id: req.params.id },
@@ -182,6 +211,7 @@ export const getCommentsByPost = async (
           },
         },
       },
+      orderBy: { [sort]: order },
     });
 
     res.status(200).json({
